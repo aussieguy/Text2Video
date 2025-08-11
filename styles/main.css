@@ -1,0 +1,168 @@
+:root {
+    /* Colors */
+    --bg-primary: #000000;
+    --bg-secondary: #111111;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --accent-primary: #6F4FF2;
+    --accent-hover: #5B3FD6;
+    --border-color: #333333;
+    --error-color: #FF4444;
+    --panel-bg: rgba(45, 45, 48, 0.95);
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Typography */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    grid-template-areas: "nav options video";
+    height: 100vh;
+    max-width: 2000px;
+    margin: 0 auto;
+    gap: var(--spacing-md);
+}
+
+.nav-panel {
+    grid-area: nav;
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-md);
+    overflow-y: auto;
+}
+
+.options-panel {
+    grid-area: options;
+    padding-top: var(--spacing-xs);
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xl);
+    background-color: var(--bg-primary);
+    overflow-y: auto;
+    height: calc(100vh - 60px); /* Subtract only the header height for maximum scroll */
+}
+
+.video-panel {
+    grid-area: video;
+    padding-top: var(--spacing-xl);
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+    background-color: var(--bg-primary);
+    overflow-y: auto;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    display: block;
+}
+
+.video-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: var(--bg-secondary);
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: var(--panel-bg);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Typography */
+h2 {
+    font-size: 24px;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 600;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Login Page Styles */
+.video-background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+}
+#background-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+#login_in {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background: rgba(20, 20, 20, 0.85);
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* Styling for the header and logout button */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 60px; /* or your header height */
+}
+
+#logout-button {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#wait-message {
+    margin: 0 auto;
+    font-size: 1.1rem;
+    color: #ffffffc5;
+    text-align: center;
+    border: #FF4444 1px solid;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    animation: fadeIn 5s ease-in-out;
+}

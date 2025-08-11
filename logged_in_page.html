@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Creator</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel - Navigation -->
+        <nav class="nav-panel">
+            <div class="nav-links">
+                <button class="nav-link active" data-panel="text-to-video">Text to Video</button>
+                <button class="nav-link" data-panel="image-to-video">Image to Video</button>
+                <span id="credits-remaining">Credits remaining</span>
+                <button id="logout-button" class="nav-link">Logout</button>
+                <span id="wait-message" hidden >Please wait while your video is being created ...</span> 
+                <p><span id="display-name"></span></p>       
+            </div>
+        </nav>
+
+        <!-- Middle Panel - Options -->
+        <main class="options-panel">
+            <div class="panel-content" id="text-to-video-panel">
+                <!-- Text to Video -->
+                <h2>Text to Video</h2>
+                <form class="creation-form">
+                    <div class="form-group">
+
+                        <label for="text-model">Model</label>
+                        <div class="custom-select" id="text-model-wrapper">
+                            <div class="select-selected" tabindex="0">
+                                <div class="model-option">
+                                    <img src="/images/Pollo.png" alt="Pollo AI" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Pollo 1.6</span>
+                                        <span class="model-description">Better, faster and cheaper for high-quality, super-realistic, creative, and cinematic video generation</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="select-items select-hide" tabindex="0">
+                                <div class="model-option" data-value="pollo-1.6">
+                                    <img src="/images/Pollo.png" alt="Pollo AI" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Pollo 1.6</span>
+                                        <span class="model-description">Better, faster and cheaper for high-quality, super-realistic, creative, and cinematic video generation</span>
+                                    </div>
+                                </div>
+                                <div class="model-option" data-value="kling-2-1-Master" tabindex="0">
+                                    <img src="/images/Kling.png" alt="Kling 2.1 Master" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Kling 2.1 Master</span>
+                                        <span class="model-description">Known for lifelike movements, enhanced motion dynamics, and improved video quality</span>
+                                    </div>
+                                </div>
+                                <div class="model-option" data-value="pixverse-v4-5" tabindex="0">
+                                    <img src="/images/Pixverse V4.5.png" alt="PixVerse V4.5" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">PixVerse V4.5</span>
+                                        <span class="model-description">Creates videos with lifelike motion, detailed effects, and professional quality output</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <select id="text-model" required hidden>
+                                <option value="pollo-1.6">Pollo 1.6</option>
+                                <option value="kling-2-1-Master">Kling 2.1 Master</option>
+                                <option value="pixverse-v4-5">Pixverse V4.5</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text-prompt">Prompt</label>
+                        <div class="textarea-wrapper">
+                            <textarea id="text-prompt" maxlength="500" required placeholder="Describe your video"></textarea>
+                            <div class="character-counter"><span id="text-char-count">0</span>/500</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Resolution</label>
+                        <div class="resolution-options">
+                            <button type="button" class="resolution-button active" data-resolution="480p">480P</button>
+                            <button type="button" class="resolution-button" data-resolution="720p">720P</button>
+                            <button type="button" class="resolution-button" data-resolution="1080p">1080P</button>
+                        </div>
+                        <input type="hidden" id="text-resolution" name="text-resolution" value="480p">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Video Length</label>
+                        <div class="video-length-options">
+                            <label class="video-length-label">
+                                <input type="radio" name="video-length" value="5" checked hidden id="length-5s">
+                                <span class="custom-radio"></span> 5s
+                            </label>
+                            <label class="video-length-label">
+                                <input type="radio" name="video-length" value="10" hidden id="length-10s">
+                                <span class="custom-radio"></span> 10s
+                            </label>
+                        </div>
+                        <input type="hidden" id="text-video-length" name="text-video-length" value="5">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Aspect Ratio</label>
+                        <div class="aspect-ratio-options">
+                            <button type="button" class="aspect-ratio-button" data-aspect="16:9">
+                                <span class="aspect-rect aspect-16-9"></span>
+                                <span class="aspect-label">16:9</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="9:16">
+                                <span class="aspect-rect aspect-9-16"></span>
+                                <span class="aspect-label">9:16</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="4:3">
+                                <span class="aspect-rect aspect-4-3"></span>
+                                <span class="aspect-label">4:3</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button active" data-aspect="3:4">
+                                <span class="aspect-rect aspect-3-4"></span>
+                                <span class="aspect-label">3:4</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="1:1">
+                                <span class="aspect-rect aspect-1-1"></span>
+                                <span class="aspect-label">1:1</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="text-aspect-ratio" name="text-aspect-ratio" value="16:9">
+                    </div>
+
+                    <button type="submit" class="create-button" id="create-button">
+                        <span class="button-text">Create some magic</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+                <span id="create-count"></span>
+            </div>
+
+            <div class="panel-content hidden" id="image-to-video-panel">
+                <!-- Image to Video -->
+                <h2>Image to Video</h2>
+                <form class="creation-form">
+                    <div class="form-group">
+
+                        <label for="image-model">Model</label>
+                        <div class="custom-select" id="image-model-wrapper">
+                            <div class="select-selected" tabindex="0">
+                                <div class="model-option">
+                                    <img src="/images/Pollo.png" alt="Pollo AI" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Pollo 1.6</span>
+                                        <span class="model-description">Better, faster and cheaper for high-quality, super-realistic, creative, and cinematic video generation</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="select-items select-hide">
+                                <div class="model-option" data-value="pollo-1.6" tabindex="0">
+                                    <img src="/images/Pollo.png" alt="Pollo AI" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Pollo 1.6</span>
+                                        <span class="model-description">Better, faster and cheaper for high-quality, super-realistic, creative, and cinematic video generation</span>
+                                    </div>
+                                </div>
+                                <div class="model-option" data-value="kling-1.6" tabindex="0">
+                                    <img src="/images/Kling.png" alt="Kling AI" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Kling 1.6</span>
+                                        <span class="model-description">Known for lifelike movements, enhanced motion dynamics, and improved video quality</span>
+                                    </div>
+                                </div>
+                                <div class="model-option" data-value="google-veo-3" tabindex="0">
+                                    <img src="/images/Google Veo 3.png" alt="Google Veo 3" class="model-icon" width="180" height="180">
+                                    <div class="model-text">
+                                        <span class="model-name">Google Veo3</span>
+                                        <span class="model-description">Offers dialogue between characters, sound effects, and background noise for a richer viewing experience</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <select id="image-model" required hidden>
+                                <option value="pollo-1.6">Pollo 1.6</option>
+                                <option value="kling-1.6">Kling 1.6</option>
+                                <option value="google-veo-3">Google Veo3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image-upload">Starting image</label>
+                        <div class="upload-wrapper">
+                            <input type="file" id="image-upload" accept="image/*" required>
+                            <button type="button" class="upload-button">Upload an image</button>
+                            <span class="model-description">Supported formats: JPEG/PNG/JPG </span>
+                            <span class="file-name" style="color:#6F4FF2; font-size: 20px;"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image-prompt">Prompt</label>
+                        <div class="textarea-wrapper">
+                            <textarea id="image-prompt" maxlength="500" required placeholder="Describe your video"></textarea>
+                            <div class="character-counter"><span id="image-char-count">0</span>/500</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Resolution</label>
+                        <div class="resolution-options">
+                            <button type="button" class="resolution-button active" data-resolution="480p">480P</button>
+                            <button type="button" class="resolution-button" data-resolution="720p">720P</button>
+                            <button type="button" class="resolution-button" data-resolution="1080p">1080P</button>
+                        </div>
+                        <input type="hidden" id="image-resolution" name="image-resolution" value="480p">
+                    </div>
+                    <div class="form-group">
+                        <label>Video Length</label>
+                        <div class="video-length-options">
+                            <label class="video-length-label">
+                                <input type="radio" name="image-video-length" value="5" checked hidden id="image-length-5s">
+                                <span class="custom-radio"></span> 5s
+                            </label>
+                            <label class="video-length-label">
+                                <input type="radio" name="image-video-length" value="10" hidden id="image-length-10s">
+                                <span class="custom-radio"></span> 10s
+                            </label>
+                        </div>
+                        <input type="hidden" id="image-video-length" name="image-video-length" value="5">
+                    </div>
+                    
+                        <label>Aspect Ratio</label>
+                        <div class="aspect-ratio-options">
+                            <button type="button" class="aspect-ratio-button active" data-aspect="16:9">
+                                <span class="aspect-rect aspect-16-9"></span>
+                                <span class="aspect-label">16:9</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="9:16">
+                                <span class="aspect-rect aspect-9-16"></span>
+                                <span class="aspect-label">9:16</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="4:3">
+                                <span class="aspect-rect aspect-4-3"></span>
+                                <span class="aspect-label">4:3</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="3:4">
+                                <span class="aspect-rect aspect-3-4"></span>
+                                <span class="aspect-label">3:4</span>
+                            </button>
+                            <button type="button" class="aspect-ratio-button" data-aspect="1:1">
+                                <span class="aspect-rect aspect-1-1"></span>
+                                <span class="aspect-label">1:1</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="image-aspect-ratio" name="image-aspect-ratio" value="16:9">
+
+                    <button type="submit" class="create-button" id="create-image-video">
+                        <span class="button-text">Create some magic</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+                <span id="create-image"></span>
+            </div>
+        </main>
+
+        <!-- Right Panel - Video Player -->
+        <section class="video-panel">
+            <div class="panel-content" id="panel-content" hidden>  <!-- Make it hidden until we have something to show -->
+                <div class="video-container">
+                    <video autoplay id="video-player" controls loop>
+                        <source src="./videos/Dog_video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="scripts/data.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/app.js"></script>
+    <script type="application/javascript" src="scripts/apiKey.js"></script>
+    <script src="scripts/generationCost.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        let userCredits;
+
+        // Configure sign-out button
+        document.getElementById('logout-button').addEventListener('click', function() {
+            firebase.auth().signOut().then(function() {
+                // Sign-out successful.
+                window.location.href = 'index.html'; // Redirect to index page
+            }).catch(function(error) {
+                // An error happened.
+                console.error('Sign-out error:', error);
+            });
+        });
+
+        async function getApiKey() {
+            return await fetchApiKey(); // Fetch the API key from the server
+        }
+
+        let documentId;
+        getApiKey().then(keys => {
+            // Destructure the array returned by fetchApiKey()
+            const [apiKey, fbApiKey] = keys;
+            firebaseApiKey = fbApiKey;
+
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: firebaseApiKey,
+                authDomain: "fir-project-2feb9.firebaseapp.com",
+                projectId: "fir-project-2feb9",
+                storageBucket: "fir-project-2feb9.firebasestorage.app",
+                messagingSenderId: "767297268517",
+                appId: "1:767297268517:web:6a8b5e2033841bb61208cc",
+            };
+
+            // FirebaseUI initialization
+            const app = firebase.initializeApp(firebaseConfig);
+
+            // Initialize Cloud Storage and get a reference to the service
+            const storage = firebase.storage(); 
+            
+            // Initialize Cloud Firestore and get a reference to the service
+            const db = firebase.firestore();
+
+            // Check if user is already signed in
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (!user) {
+                    // User is not signed in
+                    window.location.href = 'login.html';
+                } else {
+                    // Fetch and display the user details from Firestore
+                    db.collection("users").where("email", "==", user.email)
+                        .get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                userCredits = doc.data().credits; // Fetch the user's credits
+                                document.getElementById('credits-remaining').innerHTML = `<span style="color:#A0A0A0">Credits remaining </span> <span style="color:#5B3FD6; font-size:20px">${doc.data().credits}</span>`;                                
+                                document.getElementById('display-name').innerHTML = `<span style="color:#A0A0A0">Welcome </span> <span style="color:#5B3FD6; font-size:18px">${doc.data().displayName || user.email}</span>`;
+                                documentId = doc.id; // Fetch the Document ID for this user
+                            });
+                        })
+                        .catch((error) => {
+                            console.log("Error getting documents: ", error);
+                        });
+                };
+            });         
+
+            // Setup UI interaction handlers immediately, without waiting for DOMContentLoaded
+            setupResolutionButtons();
+            setupVideoLengthInputs();
+            setupAspectRatioButtons();
+            setupModelSelects();
+            setupImageUpload();
+            setupNavigation();
+            setupCharacterCounters();
+            setupFormSubmissions();
+            
+            function setupResolutionButtons() {
+                // Resolution button logic for Text to Video
+                const resButtons = document.querySelectorAll('#text-to-video-panel .resolution-button');
+                const resInput = document.getElementById('text-resolution');
+                
+                // Set initial value from the active button
+                const activeTextResButton = document.querySelector('#text-to-video-panel .resolution-button.active');
+                if (activeTextResButton) {
+                    resInput.value = activeTextResButton.getAttribute('data-resolution');
+                }
+                
+                resButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent form submission
+                        resButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        resInput.value = this.getAttribute('data-resolution');
+                        
+                    });
+                });
+
+                // Resolution button logic for Image to Video
+                const imageResButtons = document.querySelectorAll('#image-to-video-panel .resolution-button');
+                const imageResInput = document.getElementById('image-resolution');
+                
+                // Set initial value from the active button
+                const activeImageResButton = document.querySelector('#image-to-video-panel .resolution-button.active');
+                if (activeImageResButton) {
+                    imageResInput.value = activeImageResButton.getAttribute('data-resolution');
+                }
+                
+                imageResButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent form submission
+                        imageResButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        imageResInput.value = this.getAttribute('data-resolution');
+
+                    });
+                });
+            }
+            
+            function setupVideoLengthInputs() {
+                // Video length radio button logic for Text to Video
+                const videoLengthInputs = document.querySelectorAll('#text-to-video-panel input[name="video-length"]');
+                const lengthInput = document.getElementById('text-video-length');
+                
+                videoLengthInputs.forEach(input => {
+                    // Set initial state
+                    if (input.checked) {
+                        input.nextElementSibling.classList.add('active');
+                        lengthInput.value = input.value;
+                    }
+                    
+                    input.addEventListener('change', function() {
+                        // Remove active class from all custom radio buttons in this panel
+                        document.querySelectorAll('#text-to-video-panel .custom-radio').forEach(radio => {
+                            radio.classList.remove('active');
+                        });
+                        
+                        // Add active class to the selected radio button's custom display
+                        this.nextElementSibling.classList.add('active');
+                        lengthInput.value = this.value;
+                    });
+                });
+
+                // Video length radio button logic for Image to Video
+                const imageVideoLengthInputs = document.querySelectorAll('#image-to-video-panel input[name="image-video-length"]');
+                const imageLengthInput = document.getElementById('image-video-length');
+                
+                imageVideoLengthInputs.forEach(input => {
+                    // Set initial state
+                    if (input.checked) {
+                        input.nextElementSibling.classList.add('active');
+                        imageLengthInput.value = input.value;
+                    }
+                    
+                    input.addEventListener('change', function() {
+                        // Remove active class from all custom radio buttons in this panel
+                        document.querySelectorAll('#image-to-video-panel .custom-radio').forEach(radio => {
+                            radio.classList.remove('active');
+                        });
+                        
+                        // Add active class to the selected radio button's custom display
+                        this.nextElementSibling.classList.add('active');
+                        imageLengthInput.value = this.value;
+                    });
+                });
+            }
+            
+            function setupAspectRatioButtons() {
+                // Aspect ratio button logic for Text to Video
+                const aspectButtons = document.querySelectorAll('#text-to-video-panel .aspect-ratio-button');
+                const aspectInput = document.getElementById('text-aspect-ratio');
+                
+                // Set initial value from the active button
+                const activeTextAspectButton = document.querySelector('#text-to-video-panel .aspect-ratio-button.active');
+                if (activeTextAspectButton) {
+                    aspectInput.value = activeTextAspectButton.getAttribute('data-aspect');
+                }
+                
+                // Set initial aspect ratio
+                updateVideoContainerAspectRatio(aspectInput.value);
+
+                aspectButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent form submission
+                        aspectButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        const aspectRatio = this.getAttribute('data-aspect');
+                        aspectInput.value = aspectRatio;
+
+                        updateVideoContainerAspectRatio(aspectRatio);
+                    });
+                });
+
+                // Aspect ratio button logic for Image to Video
+                const imageAspectButtons = document.querySelectorAll('#image-to-video-panel .aspect-ratio-button');
+                const imageAspectInput = document.getElementById('image-aspect-ratio');
+                
+                // Set initial value from the active button
+                const activeImageAspectButton = document.querySelector('#image-to-video-panel .aspect-ratio-button.active');
+                if (activeImageAspectButton) {
+                    imageAspectInput.value = activeImageAspectButton.getAttribute('data-aspect');
+                }
+
+                imageAspectButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent form submission
+                        imageAspectButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        const aspectRatio = this.getAttribute('data-aspect');
+                        imageAspectInput.value = aspectRatio;
+                        updateVideoContainerAspectRatio(aspectRatio);
+                    });
+                });
+            }
+
+            function updateVideoContainerAspectRatio(aspectRatio) {
+                const videoContainer = document.querySelector('.video-container');
+                if (!videoContainer) return;
+                switch(aspectRatio) {
+                    case '16:9':
+                        videoContainer.style.aspectRatio = '16/9';
+                        break;
+                    case '9:16':
+                        videoContainer.style.aspectRatio = '9/16';
+                        break;
+                    case '4:3':
+                        videoContainer.style.aspectRatio = '4/3';
+                        break;
+                    case '3:4':
+                        videoContainer.style.aspectRatio = '3/4';
+                        break;
+                    case '1:1':
+                        videoContainer.style.aspectRatio = '1/1';
+                        break;
+                    default:
+                        videoContainer.style.aspectRatio = '16/9';
+                }
+            }
+            
+            function setupModelSelects() {
+                // Select Text to Video Model
+                const textModelSelect = document.querySelector('#text-model-wrapper .select-selected');
+                const textModelItems = document.querySelector('#text-model-wrapper .select-items');
+                const textModelOptions = document.querySelectorAll('#text-model-wrapper .model-option');
+                const textModelInput = document.getElementById('text-model');
+                
+                textModelSelect.addEventListener('mouseclick', function() {                    
+                    textModelItems.classList.toggle('select-hide');
+                    this.classList.toggle('select-arrow-active');
+                    
+                });
+
+                textModelOptions.forEach(option => {
+                    option.addEventListener('mouseclick', function(event) {
+                        const value = this.getAttribute('data-value');
+                        if (value) {
+                            textModelInput.value = value;
+                            textModelSelect.innerHTML = this.innerHTML;
+                            textModelItems.classList.add('select-hide');
+                            textModelSelect.classList.remove('select-arrow-active');
+                        }
+                    });
+                });                
+                
+                // Select Image to Video Model
+                const imageModelSelect = document.querySelector('#image-model-wrapper .select-selected');
+                const imageModelItems = document.querySelector('#image-model-wrapper .select-items');
+                const imageModelOptions = document.querySelectorAll('#image-model-wrapper .model-option');
+                const imageModelInput = document.getElementById('image-model');
+
+                imageModelSelect.addEventListener('click', function() {
+                    imageModelItems.classList.toggle('select-hide');
+                    this.classList.toggle('select-arrow-active');
+                });
+
+                imageModelOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const value = this.getAttribute('data-value');
+                        if (value) {
+                            imageModelInput.value = value;                                                   
+                            // Update the displayed selected option
+                            imageModelSelect.innerHTML = this.outerHTML;
+                            imageModelItems.classList.add('select-hide');
+                            imageModelSelect.classList.remove('select-arrow-active');
+                        }
+                    });
+                });
+                // Close the dropdown if clicked outside
+                document.addEventListener('click', function(event) {
+                    if (!imageModelSelect.contains(event.target) && !imageModelItems.contains(event.target)) {
+                        imageModelItems.classList.add('select-hide');
+                        imageModelSelect.classList.remove('select-arrow-active');
+                    }
+                });
+                document.addEventListener('click', function(event) {
+                    if (!textModelSelect.contains(event.target) && !textModelItems.contains(event.target)) {
+                        textModelItems.classList.add('select-hide');
+                        textModelSelect.classList.remove('select-arrow-active');            
+                    };
+                });                
+            }
+            
+            function setupImageUpload() {
+                // Image upload button
+                const imagePanel = document.getElementById('image-to-video-panel');
+                const imageUploadInput = imagePanel.querySelector('#image-upload');
+                const uploadButton = imagePanel.querySelector('.upload-button');
+                const fileNameSpan = imagePanel.querySelector('.file-name');
+
+                // Remove any existing event listeners (in case they were added multiple times)
+                uploadButton.replaceWith(uploadButton.cloneNode(true));
+                const newUploadButton = imagePanel.querySelector('.upload-button');
+                
+                newUploadButton.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent any default action
+                    e.stopPropagation(); // Stop event bubbling
+                    imageUploadInput.click();
+                });
+
+                imageUploadInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        fileNameSpan.textContent = this.files[0].name;
+                    } else {
+                        fileNameSpan.textContent = '';
+                    }
+                });
+            }
+            
+            function setupNavigation() {
+                // Tab switching logic
+                const navLinks = document.querySelectorAll('.nav-link');
+                const mainPanels = document.querySelectorAll('.options-panel .panel-content');
+
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        const target = this.getAttribute('data-panel');
+                        
+                        // Update active nav link
+                        navLinks.forEach(navLink => {
+                            navLink.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // Update visible panel - only hide/show panels in the options-panel section
+                        mainPanels.forEach(panel => {
+                            panel.classList.add('hidden');
+                        });
+                        document.getElementById(target + '-panel').classList.remove('hidden');
+                    });
+                });
+            }
+            
+            function setupCharacterCounters() {
+                // Character counter for Text to Video
+                const textPrompt = document.getElementById('text-prompt');
+                const textCharCount = document.getElementById('text-char-count');
+
+                textPrompt.addEventListener('input', function() {
+                    const count = this.value.length;
+                    textCharCount.textContent = count;
+                });
+
+                // Character counter for Image to Video
+                const imagePrompt = document.getElementById('image-prompt');
+                const imageCharCount = document.getElementById('image-char-count');
+
+                imagePrompt.addEventListener('input', function() {
+                    const count = this.value.length;
+                    imageCharCount.textContent = count;
+                });
+            }
+            
+            function setupFormSubmissions() {
+                // Text to Video form submission
+                const textForm = document.querySelector('#text-to-video-panel form');
+                textForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Collect all form values
+                    const formData = {
+                        model: document.getElementById('text-model').value,
+                        prompt: document.getElementById('text-prompt').value,
+                        resolution: document.getElementById('text-resolution').value,
+                        videoLength: document.getElementById('text-video-length').value,
+                        aspectRatio: document.getElementById('text-aspect-ratio').value
+                    };
+
+                    // Update credits remaining
+                    userCredits -= cost              
+                    document.getElementById('credits-remaining').innerHTML = `<span style="color:#A0A0A0">Credits remaining </span> <span style="color:#5B3FD6">${userCredits}</span>`;                    
+                    saveUserCredits(); // Save updated credits to Firestore
+
+                    // Replace button text with a spinner                    
+                    // document.querySelector('.button-text').style.display = 'none';    // First hide the button
+                    // document.querySelector('.spinner').style.display = 'block'; // Then show the spinner
+
+                    // Show wait message and placeholder video
+                    document.getElementById('wait-message').hidden = false;
+                    const videoPanel = document.getElementById('panel-content');
+                    const videoPlayer = document.getElementById('video-player');
+                    if (videoPlayer) {
+                        videoPlayer.pause();
+                        videoPlayer.setAttribute('src', './videos/Dog_video.mp4');
+                        videoPlayer.load();
+                    }
+                    if (videoPanel) {
+                        videoPanel.hidden = false;
+                    }
+                });
+                
+                // Image to Video form submission
+                const imageForm = document.querySelector('#image-to-video-panel form');
+                imageForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get file if any
+                    const imageFile = document.getElementById('image-upload').files[0];
+                    
+                    // Collect all form values
+                    const formData = {
+                        model: document.getElementById('image-model').value,
+                        prompt: document.getElementById('image-prompt').value,
+                        resolution: document.getElementById('image-resolution').value,
+                        videoLength: document.getElementById('image-video-length').value,
+                        aspectRatio: document.getElementById('image-aspect-ratio').value,
+                        imageFile: imageFile ? imageFile.name : 'No file selected'
+                    };
+                    
+                    // Update credits remaining
+                    userCredits -= cost  
+                    document.getElementById('credits-remaining').innerHTML = `<span style="color:#A0A0A0">Credits remaining </span> <span style="color:#5B3FD6">${userCredits}</span>`;                    
+                    saveUserCredits(); // Save updated credits to Firestore
+
+/////////                   // Show loading state - replace the text with a spinner
+                    
+                    // Show wait message and placeholder video
+                    document.getElementById('wait-message').hidden = false;
+                    const videoPanel = document.getElementById('panel-content');
+                    const videoPlayer = document.getElementById('video-player');
+                    if (videoPlayer) {
+                        videoPlayer.pause();
+                        videoPlayer.setAttribute('src', './videos/Dog_video.mp4');
+                        videoPlayer.load();
+                    }
+                    if (videoPanel) {
+                        videoPanel.hidden = false;
+                    }
+                });
+            }
+
+            // Save the updated credits to Firestore
+            function saveUserCredits() {
+                const userRef = db.collection("users").doc(documentId);
+                userRef.update({
+                    credits: userCredits
+                }).then(() => {
+                    // console.log("User credits updated successfully");
+                }).catch((error) => {
+                    // console.error("Error updating user credits: ", error);
+                });
+            };
+
+            // Text to Video cost calculation
+            document.getElementById('create-button').addEventListener('mouseover', function() {
+                const model = document.getElementById('text-model').value;
+                const videoLength = document.getElementById('text-video-length').value;
+                var resolution = document.getElementById('text-resolution').value;
+                const textOrImage = "text";
+
+                if (videoLength === "") {
+                    videoLength = 5; // Default to 5 seconds if not specified   
+                }
+//////////////// Calculate the cost based on the model, video length, resolution, and aspect ratio
+console.log("parameters are: ", model, videoLength, resolution, textOrImage)
+// kling doesn't have a resolution setting
+                if (model==="kling-2-1-Master") {
+                    resolution = ""
+                };
+                cost = calculateVideoCost(model, videoLength, resolution, textOrImage);
+
+                // Update the create count display
+                document.getElementById('create-count').textContent = `${cost} credits needed`;
+
+                // If no credits left, show an alert
+                if (userCredits - cost < 0) {
+                    document.getElementById('create-button').innerHTML = `<span class="button-text" style="color:rgb(252, 28, 3);">Insufficient Credits</span>`;
+                };
+            })
+
+            // Hide the credit count and restore button text when not hovering over the button
+            document.getElementById('create-button').addEventListener('mouseout', function() {    
+                document.getElementById('create-count').textContent = '';
+                document.getElementById('create-button').innerHTML = `<span class="button-text">Create some magic</span>`;
+            });
+
+            // Image to Video cost calculation
+            document.getElementById('create-image-video').addEventListener('mouseover', function() {
+                const model = document.getElementById('image-model').value;
+                const videoLength = document.getElementById('image-video-length').value;
+                const resolution = document.getElementById('image-resolution').value;
+                const textOrImage = "image";
+
+                // Calculate the cost based on the model, video length, resolution, and aspect ratio
+                cost = calculateVideoCost(model, videoLength, resolution, textOrImage);
+
+                // Update the create count display
+                document.getElementById('create-image').textContent = `${cost} credits needed`;
+
+                // If no credits left, show an alert
+                if (userCredits - cost < 0) {
+                    document.getElementById('create-image-video').innerHTML = `<span class="button-text" style="color:rgb(252, 28, 3);">Insufficient Credits</span>`;
+                };                
+            })
+
+            // Hide the credit count and restore button text when not hovering over the button
+            document.getElementById('create-image-video').addEventListener('mouseout', function() {    
+                document.getElementById('create-image').textContent = '';
+                document.getElementById('create-image-video').innerHTML = `<span class="button-text">Create some magic</span>`;
+            });
+        });
+        
+    </script>
+    
+</body>
+</html>

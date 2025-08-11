@@ -1,0 +1,123 @@
+/* Mobile First Approach */
+
+/* Mobile (320px and up) */
+@media screen and (max-width: 767px) {
+    body {
+        overflow: auto;
+    }
+    
+    .app-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr 1fr;
+        grid-template-areas:
+            "nav"
+            "options"
+            "video";
+        height: auto;
+        min-height: 100vh;
+    }
+    .nav-panel { grid-area: nav; }
+    .options-panel { grid-area: options; }
+    .video-panel { grid-area: video; }
+
+    .nav-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        overflow: visible;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--spacing-md);
+    }
+
+    .nav-link {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .options-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: var(--spacing-md);
+        height: auto;
+        max-height: none;
+    }
+
+    .video-panel {
+        padding: var(--spacing-md);
+        height: auto;
+    }
+}
+
+/* Tablet (768px and up) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    body {
+        overflow: hidden;
+    }
+    
+    .app-container {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        grid-template-rows: 1fr 1fr;
+        grid-template-areas:
+            "nav options"
+            "nav video";
+        height: 100vh;
+    }
+    .nav-panel { grid-area: nav; }
+    .options-panel { grid-area: options; }
+    .video-panel { grid-area: video; }
+
+    .nav-panel {
+        grid-row: 1 / -1;
+        height: 100vh;
+    }
+
+    .options-panel {
+        grid-column: 2;
+        grid-row: 1;
+        height: 100%;
+        max-height: 50vh;
+    }
+
+    .video-panel {
+        grid-column: 2;
+        grid-row: 2;
+        height: 100%;
+    }
+}
+
+/* Desktop (1024px and up) */
+@media screen and (min-width: 1024px) {
+    body {
+        overflow: hidden;
+    }
+    
+    .app-container {
+        display: grid;
+        grid-template-columns: 200px 1fr 1fr;
+        grid-template-areas: "nav options video";
+        height: 100vh;
+    }
+    .nav-panel, .options-panel, .video-panel {
+        height: 100vh;
+    }
+    .nav-panel { grid-area: nav; }
+    .options-panel { grid-area: options; }
+    .video-panel { grid-area: video; }
+}
+
+/* Touch-friendly adjustments */
+@media (hover: none) {
+    .nav-link,
+    .upload-button,
+    .create-button {
+        min-height: 44px;
+    }
+
+    select {
+        min-height: 44px;
+    }
+}
